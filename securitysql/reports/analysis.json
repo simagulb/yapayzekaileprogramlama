@@ -1,0 +1,14 @@
+{
+  "file": "samples/sabit_parola.py",
+  "finding_count": 1,
+  "findings": [
+    {
+      "type": "Path Traversal (Dizin Geçişi) / Keyfi Dosya Okuma",
+      "severity": "Yüksek",
+      "evidence": "tam_yol = base_dir + dosya_adi\\n    with open(tam_yol, 'r') as f:",
+      "cause": "Kullanıcı tarafından sağlanan 'dosya_adi' girdisinin herhangi bir doğrulama veya temizleme işlemine tabi tutulmadan doğrudan temel dizin yolu ile birleştirilmesi.",
+      "impact": "Saldırganlar '../' gibi dizin atlama karakterlerini kullanarak hedef dizinin dışına çıkabilir ve sunucu üzerindeki hassas sistem veya yapılandırma dosyalarını okuyabilir.",
+      "secure_code": "import os\\n\\ndef dosya_oku(dosya_adi):\\n    base_dir = os.path.abspath('/var/www/html/images/')\\n    tam_yol = os.path.abspath(os.path.join(base_dir, dosya_adi))\\n    if not tam_yol.startswith(base_dir + os.sep):\\n        raise ValueError('Geçersiz dosya yolu erişimi!')\\n    with open(tam_yol, 'r') as f:\\n        return f.read()"
+    }
+  ]
+}
